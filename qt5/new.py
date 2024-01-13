@@ -1,4 +1,3 @@
-#!/bin/python
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'new.ui'
@@ -85,10 +84,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.line_2)
         self.tableView = QtWidgets.QTableView(self.centralwidget)
         self.tableView.setObjectName("tableView")
-        self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  # Make the table non-editable
-        self.model = QtGui.QStandardItemModel() # Create a QStandardItemModel
-        self.tableView.setModel(self.model)
-        self.add_items_to_model() # Add items to the model
         self.verticalLayout_4.addWidget(self.tableView)
         self.gridLayout.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -162,43 +157,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
 
-        self.actionViewBook.triggered.connect(self.books_button_clicked)
-
-        # Connect functions to button clicks
-        self.butt_books.clicked.connect(self.books_button_clicked)
-        self.butt_users.clicked.connect(self.users_button_clicked)
-        self.butt_order.clicked.connect(self.order_button_clicked)
-        self.butt_stack.clicked.connect(self.stack_button_clicked)
-
-        self.butt_exit.clicked.connect(self.exit_button_clicked)
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def add_items_to_model(self):
-        # Add items to the model (you can customize this based on your data)
-        self.model.setHorizontalHeaderLabels(["Column 1", "Column 2"])
-
-        for i in range(5):
-            item1 = QtGui.QStandardItem(f"Item {i + 1} - Col 1")
-            item2 = QtGui.QStandardItem(f"Item {i + 1} - Col 2")
-            self.model.appendRow([item1, item2])
-
-    def books_button_clicked(self):
-        print("Books button clicked")
-
-    def users_button_clicked(self):
-        print("Users button clicked")
-
-    def stack_button_clicked(self):
-        print("Stack button clicked")
-
-    def order_button_clicked(self):
-        print("Order button clicked")
-
-    def exit_button_clicked(self):
-        print("Exit button clicked")
-        QtWidgets.qApp.quit()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

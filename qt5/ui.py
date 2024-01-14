@@ -91,7 +91,6 @@ class Ui_MainWindow(object):
         self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  # Make the table non-editable
         self.model = QtGui.QStandardItemModel() # Create a QStandardItemModel
         self.tableView.setModel(self.model)
-        self.add_items_to_model() # Add items to the model
         self.verticalLayout_4.addWidget(self.tableView)
         self.gridLayout.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -179,30 +178,35 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def add_items_to_model(self):
+    def add_items_to_model(self, name):
         # Add items to the model (you can customize this based on your data)
-        self.model.setHorizontalHeaderLabels(["Column 1", "Column 2"])
+        self.model.clear()
+        self.model.setHorizontalHeaderLabels([f"{name} ID", f"Name"])
 
         for i in range(5):
-            item1 = QtGui.QStandardItem(f"Item {i + 1} - Col 1")
-            item2 = QtGui.QStandardItem(f"Item {i + 1} - Col 2")
+            item1 = QtGui.QStandardItem(f"{name} {i + 1} - 1")
+            item2 = QtGui.QStandardItem(f"{name} {i + 1} - 2")
             self.model.appendRow([item1, item2])
 
     def books_button_clicked(self):
         print("Books button clicked")
         self.section_title.setText("Books")
+        self.add_items_to_model("Book") # Add items to the model
 
     def users_button_clicked(self):
         print("Users button clicked")
         self.section_title.setText("Users")
+        self.add_items_to_model("User") # Add items to the model
 
     def stack_button_clicked(self):
         print("Stack button clicked")
         self.section_title.setText("Stack")
+        self.add_items_to_model("Stack") # Add items to the model
 
     def order_button_clicked(self):
         print("Order button clicked")
         self.section_title.setText("Order List")
+        self.add_items_to_model("Order") # Add items to the model
 
     def exit_button_clicked(self):
         print("Exit button clicked")

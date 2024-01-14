@@ -1,7 +1,7 @@
 #!/bin/python
 
 import mysql.connector as mc
-from random import randrange as rr
+# from random import randrange as rr
 
 class database():
     # init {{{
@@ -34,8 +34,7 @@ class database():
         name = self.database_name
         self.cursor.execute("SHOW DATABASES")
         if not self.check_exists(name, self.cursor): # create database if does not exists
-            self.cursor.execute(f"CREATE DATABASE {self.name}")
-            self.cursor.execute(sql)
+            self.cursor.execute(f"CREATE DATABASE {name}")
             tmp = f"database created: {name}"
         else:
             tmp = f"database exists: {name}"

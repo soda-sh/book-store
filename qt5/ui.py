@@ -36,11 +36,11 @@ class Ui_MainWindow(object):
         self.text.setObjectName("text")
         self.details_box.addWidget(self.text, 0, QtCore.Qt.AlignHCenter)
         self.HL_top.addLayout(self.details_box)
-        self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
-        self.HL_top.addWidget(self.line)
+        self.vline = QtWidgets.QFrame(self.centralwidget)
+        self.vline.setFrameShape(QtWidgets.QFrame.VLine)
+        self.vline.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.vline.setObjectName("vline")
+        self.HL_top.addWidget(self.vline)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.HL_top.addItem(spacerItem)
         self.actions_box_1 = QtWidgets.QVBoxLayout()
@@ -78,11 +78,14 @@ class Ui_MainWindow(object):
         self.VL_state.addWidget(self.butt_exit)
         self.HL_top.addLayout(self.VL_state)
         self.verticalLayout_4.addLayout(self.HL_top)
-        self.line_2 = QtWidgets.QFrame(self.centralwidget)
-        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_2.setObjectName("line_2")
-        self.verticalLayout_4.addWidget(self.line_2)
+        self.hline = QtWidgets.QFrame(self.centralwidget)
+        self.hline.setFrameShape(QtWidgets.QFrame.HLine)
+        self.hline.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.hline.setObjectName("hline")
+        self.verticalLayout_4.addWidget(self.hline)
+        self.section_title = QtWidgets.QLabel(self.centralwidget)
+        self.section_title.setObjectName("section_title")
+        self.verticalLayout_4.addWidget(self.section_title)
         self.tableView = QtWidgets.QTableView(self.centralwidget)
         self.tableView.setObjectName("tableView")
         self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  # Make the table non-editable
@@ -171,6 +174,7 @@ class Ui_MainWindow(object):
         self.butt_stack.clicked.connect(self.stack_button_clicked)
 
         self.butt_exit.clicked.connect(self.exit_button_clicked)
+        self.butt_ok.clicked.connect(self.ok_button_clicked)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -186,18 +190,26 @@ class Ui_MainWindow(object):
 
     def books_button_clicked(self):
         print("Books button clicked")
+        self.section_title.setText("Books")
 
     def users_button_clicked(self):
         print("Users button clicked")
+        self.section_title.setText("Users")
 
     def stack_button_clicked(self):
         print("Stack button clicked")
+        self.section_title.setText("Stack")
 
     def order_button_clicked(self):
         print("Order button clicked")
+        self.section_title.setText("Order List")
 
     def exit_button_clicked(self):
         print("Exit button clicked")
+        QtWidgets.qApp.quit()
+
+    def ok_button_clicked(self):
+        print("OK button clicked")
         QtWidgets.qApp.quit()
 
     def retranslateUi(self, MainWindow):
@@ -211,6 +223,7 @@ class Ui_MainWindow(object):
         self.butt_order.setText(_translate("MainWindow", "Order"))
         self.butt_ok.setText(_translate("MainWindow", "OK"))
         self.butt_exit.setText(_translate("MainWindow", "Exit"))
+        self.section_title.setText(_translate("MainWindow", "Title"))
         self.menuNew.setTitle(_translate("MainWindow", "New"))
         self.menuDelete.setTitle(_translate("MainWindow", "Delete"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))

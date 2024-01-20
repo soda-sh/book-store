@@ -12,6 +12,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from database import database
 from dialogs import Ui_Dialog_Add_Book as AddBook
+from dialogs import Ui_Dialog_Add_User as AddUser
+from dialogs import Ui_Dialog_Search_Book as SearchBook
+from dialogs import Ui_Dialog_Search_User as SearchUser
 
 db = database("test")
 
@@ -100,76 +103,81 @@ class Ui_MainWindow(object):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 789, 37))
         self.menubar.setObjectName("menubar")
+
         self.menuNew = QtWidgets.QMenu(self.menubar)
         self.menuNew.setObjectName("menuNew")
+
         self.menuDelete = QtWidgets.QMenu(self.menubar)
         self.menuDelete.setObjectName("menuDelete")
+
         self.menuEdit = QtWidgets.QMenu(self.menubar)
         self.menuEdit.setObjectName("menuEdit")
-        self.menuView = QtWidgets.QMenu(self.menubar)
-        self.menuView.setObjectName("menuView")
+
+        self.menuSearch = QtWidgets.QMenu(self.menubar)
+        self.menuSearch.setObjectName("menuSearch")
+
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setAutoFillBackground(False)
         self.statusbar.setSizeGripEnabled(True)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
         self.actionNewBook = QtWidgets.QAction(MainWindow)
         self.actionNewBook.setObjectName("actionNewBook")
+
         self.actionNewUser = QtWidgets.QAction(MainWindow)
         self.actionNewUser.setObjectName("actionNewUser")
+
         self.actionDeleteBook = QtWidgets.QAction(MainWindow)
         self.actionDeleteBook.setObjectName("actionDeleteBook")
+
         self.actionDeleteUser = QtWidgets.QAction(MainWindow)
         self.actionDeleteUser.setObjectName("actionDeleteUser")
+
         self.actionEditBook = QtWidgets.QAction(MainWindow)
         self.actionEditBook.setObjectName("actionEditBook")
+
         self.actionEditUser = QtWidgets.QAction(MainWindow)
         self.actionEditUser.setObjectName("actionEditUser")
+
         self.actionNewOrder = QtWidgets.QAction(MainWindow)
         self.actionNewOrder.setObjectName("actionNewOrder")
-        self.actionDeleteStack = QtWidgets.QAction(MainWindow)
-        self.actionDeleteStack.setObjectName("actionDeleteStack")
-        self.actionNewStack = QtWidgets.QAction(MainWindow)
-        self.actionNewStack.setObjectName("actionNewStack")
-        self.actionEditStack = QtWidgets.QAction(MainWindow)
-        self.actionEditStack.setObjectName("actionEditStack")
-        self.actionViewBook = QtWidgets.QAction(MainWindow)
-        self.actionViewBook.setObjectName("actionViewBook")
-        self.actionViewUser = QtWidgets.QAction(MainWindow)
-        self.actionViewUser.setObjectName("actionViewUser")
-        self.actionViewStack = QtWidgets.QAction(MainWindow)
-        self.actionViewStack.setObjectName("actionViewStack")
+
+        self.actionSearchBook = QtWidgets.QAction(MainWindow)
+        self.actionSearchBook.setObjectName("actionSearchBook")
+
+        self.actionSearchUser = QtWidgets.QAction(MainWindow)
+        self.actionSearchUser.setObjectName("actionSearchUser")
+
+        self.actionSearchStack = QtWidgets.QAction(MainWindow)
+        self.actionSearchStack.setObjectName("actionSearchStack")
+
         self.menuNew.addAction(self.actionNewBook)
         self.menuNew.addAction(self.actionNewUser)
         self.menuNew.addAction(self.actionNewOrder)
-        self.menuNew.addAction(self.actionNewStack)
         self.menuDelete.addAction(self.actionDeleteBook)
         self.menuDelete.addAction(self.actionDeleteUser)
-        self.menuDelete.addAction(self.actionDeleteStack)
         self.menuEdit.addAction(self.actionEditBook)
         self.menuEdit.addAction(self.actionEditUser)
-        self.menuEdit.addAction(self.actionEditStack)
-        self.menuView.addAction(self.actionViewBook)
-        self.menuView.addAction(self.actionViewUser)
-        self.menuView.addAction(self.actionViewStack)
+        self.menuSearch.addAction(self.actionSearchBook)
+        self.menuSearch.addAction(self.actionSearchUser)
+        self.menuSearch.addAction(self.actionSearchStack)
         self.menubar.addAction(self.menuNew.menuAction())
         self.menubar.addAction(self.menuDelete.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
-        self.menubar.addAction(self.menuView.menuAction())
-
+        self.menubar.addAction(self.menuSearch.menuAction())
         # Connect functions to menu items
         self.actionNewBook.triggered.connect(self.books_menu_clicked_new)
-
+        self.actionSearchBook.triggered.connect(self.books_menu_clicked_search)
+        self.actionSearchUser.triggered.connect(self.users_menu_clicked_search)
         # Connect functions to button clicks
         self.butt_books.clicked.connect(self.books_button_clicked)
         self.butt_users.clicked.connect(self.users_button_clicked)
         self.butt_order.clicked.connect(self.order_button_clicked)
         self.butt_stack.clicked.connect(self.stack_button_clicked)
-
         self.butt_exit.clicked.connect(self.exit_button_clicked)
         self.butt_ok.clicked.connect(self.ok_button_clicked)
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -177,7 +185,6 @@ class Ui_MainWindow(object):
         # Add items to the model
         self.model.clear()
         self.model.setHorizontalHeaderLabels(cols)
-
         x = []
         rows = []
         tmp = db.table_sort(f"{name}", "*", "id")
@@ -225,19 +232,30 @@ class Ui_MainWindow(object):
         print("OK button clicked")
         QtWidgets.qApp.quit()
 
+    def users_menu_clicked_search(self):
+        name = "Books"
+        dialog = QtWidgets.QDialog()
+        dialog.ui = SearchUser()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
+    def books_menu_clicked_search(self):
+        name = "Books"
+        dialog = QtWidgets.QDialog()
+        dialog.ui = SearchBook()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
     def books_menu_clicked_new(self):
         name = "Books"
         dialog = QtWidgets.QDialog()
         dialog.ui = AddBook()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
-        # dialog.show()
-
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Book Store"))
         self.logo.setText(_translate("MainWindow", "<html><head/><body><p><img src=\":/mainlogo/logo.png\"/></p></body></html>"))
         self.text.setText(_translate("MainWindow", "Library app"))
         self.butt_books.setText(_translate("MainWindow", "Books"))
@@ -250,7 +268,7 @@ class Ui_MainWindow(object):
         self.menuNew.setTitle(_translate("MainWindow", "New"))
         self.menuDelete.setTitle(_translate("MainWindow", "Delete"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
-        self.menuView.setTitle(_translate("MainWindow", "View"))
+        self.menuSearch.setTitle(_translate("MainWindow", "Search"))
         self.actionNewBook.setText(_translate("MainWindow", "Book"))
         self.actionNewUser.setText(_translate("MainWindow", "User"))
         self.actionDeleteBook.setText(_translate("MainWindow", "Book"))
@@ -258,15 +276,9 @@ class Ui_MainWindow(object):
         self.actionEditBook.setText(_translate("MainWindow", "Book"))
         self.actionEditUser.setText(_translate("MainWindow", "User"))
         self.actionNewOrder.setText(_translate("MainWindow", "Lend"))
-        # self.actionDeleteOrder.setText(_translate("MainWindow", "Lend"))
-        self.actionDeleteStack.setText(_translate("MainWindow", "Stack"))
-        self.actionNewStack.setText(_translate("MainWindow", "Stack"))
-        # self.actionEditOrder.setText(_translate("MainWindow", "Lend"))
-        self.actionEditStack.setText(_translate("MainWindow", "Stack"))
-        self.actionViewBook.setText(_translate("MainWindow", "Book"))
-        self.actionViewUser.setText(_translate("MainWindow", "User"))
-        # self.actionViewOrder.setText(_translate("MainWindow", "Lend"))
-        self.actionViewStack.setText(_translate("MainWindow", "Stack"))
+        self.actionSearchBook.setText(_translate("MainWindow", "Book"))
+        self.actionSearchUser.setText(_translate("MainWindow", "User"))
+        self.actionSearchStack.setText(_translate("MainWindow", "Stack"))
 import figure_rc
 
 class Ui_Dialog_Add_Book(object):

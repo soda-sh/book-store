@@ -10,7 +10,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from database import database
+from dialogs import Ui_Dialog_Add_Book as AddBook
 
+db = database("test")
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -125,22 +128,16 @@ class Ui_MainWindow(object):
         self.actionEditUser.setObjectName("actionEditUser")
         self.actionNewOrder = QtWidgets.QAction(MainWindow)
         self.actionNewOrder.setObjectName("actionNewOrder")
-        self.actionDeleteOrder = QtWidgets.QAction(MainWindow)
-        self.actionDeleteOrder.setObjectName("actionDeleteOrder")
         self.actionDeleteStack = QtWidgets.QAction(MainWindow)
         self.actionDeleteStack.setObjectName("actionDeleteStack")
         self.actionNewStack = QtWidgets.QAction(MainWindow)
         self.actionNewStack.setObjectName("actionNewStack")
-        self.actionEditOrder = QtWidgets.QAction(MainWindow)
-        self.actionEditOrder.setObjectName("actionEditOrder")
         self.actionEditStack = QtWidgets.QAction(MainWindow)
         self.actionEditStack.setObjectName("actionEditStack")
         self.actionViewBook = QtWidgets.QAction(MainWindow)
         self.actionViewBook.setObjectName("actionViewBook")
         self.actionViewUser = QtWidgets.QAction(MainWindow)
         self.actionViewUser.setObjectName("actionViewUser")
-        self.actionViewOrder = QtWidgets.QAction(MainWindow)
-        self.actionViewOrder.setObjectName("actionViewOrder")
         self.actionViewStack = QtWidgets.QAction(MainWindow)
         self.actionViewStack.setObjectName("actionViewStack")
         self.menuNew.addAction(self.actionNewBook)
@@ -149,22 +146,20 @@ class Ui_MainWindow(object):
         self.menuNew.addAction(self.actionNewStack)
         self.menuDelete.addAction(self.actionDeleteBook)
         self.menuDelete.addAction(self.actionDeleteUser)
-        self.menuDelete.addAction(self.actionDeleteOrder)
         self.menuDelete.addAction(self.actionDeleteStack)
         self.menuEdit.addAction(self.actionEditBook)
         self.menuEdit.addAction(self.actionEditUser)
-        self.menuEdit.addAction(self.actionEditOrder)
         self.menuEdit.addAction(self.actionEditStack)
         self.menuView.addAction(self.actionViewBook)
         self.menuView.addAction(self.actionViewUser)
-        self.menuView.addAction(self.actionViewOrder)
         self.menuView.addAction(self.actionViewStack)
         self.menubar.addAction(self.menuNew.menuAction())
         self.menubar.addAction(self.menuDelete.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
 
-        self.actionViewBook.triggered.connect(self.books_button_clicked)
+        # Connect functions to menu items
+        self.actionNewBook.triggered.connect(self.books_menu_clicked_new)
 
         # Connect functions to button clicks
         self.butt_books.clicked.connect(self.books_button_clicked)
@@ -178,35 +173,49 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def add_items_to_model(self, name):
-        # Add items to the model (you can customize this based on your data)
+    def add_items_to_model(self, name, cols):
+        # Add items to the model
         self.model.clear()
-        self.model.setHorizontalHeaderLabels([f"{name} ID", f"Name"])
+        self.model.setHorizontalHeaderLabels(cols)
 
-        for i in range(5):
-            item1 = QtGui.QStandardItem(f"{name} {i + 1} - 1")
-            item2 = QtGui.QStandardItem(f"{name} {i + 1} - 2")
-            self.model.appendRow([item1, item2])
+        x = []
+        rows = []
+        tmp = db.table_sort(f"{name}", "*", "id")
+        for i in tmp:
+            x.append(list(i))
+        for i in range(len(x)):
+            for j in range(len(x[i])):
+                x[i][j] = QtGui.QStandardItem(str(x[i][j]))
+            rows.append(x[i])
+            self.model.appendRow(x[i])
 
     def books_button_clicked(self):
-        print("Books button clicked")
-        self.section_title.setText("Books")
-        self.add_items_to_model("Book") # Add items to the model
+        name = "Books"
+        print(f"{name} button clicked")
+        title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
+        self.section_title.setText(title)
+        self.add_items_to_model(name.lower(), [f"{name} ID", "Name", "Author", "Publisher"]) # Add items to the model
 
     def users_button_clicked(self):
-        print("Users button clicked")
-        self.section_title.setText("Users")
-        self.add_items_to_model("User") # Add items to the model
+        name = "Users"
+        print(f"{name} button clicked")
+        title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
+        self.section_title.setText(title)
+        self.add_items_to_model(name.lower(), [f"{name} ID", "Name", "Address", "Phone NO."]) # Add items to the model
 
     def stack_button_clicked(self):
-        print("Stack button clicked")
-        self.section_title.setText("Stack")
-        self.add_items_to_model("Stack") # Add items to the model
+        name = "Stack"
+        print(f"{name} button clicked")
+        title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
+        self.section_title.setText(title)
+        self.add_items_to_model(name.lower(), [f"{name} ID", "User ID", "Book ID", "Date"]) # Add items to the model
 
     def order_button_clicked(self):
-        print("Order button clicked")
-        self.section_title.setText("Order List")
-        self.add_items_to_model("Order") # Add items to the model
+        name = "Lend"
+        print(f"{name} button clicked")
+        # title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
+        # self.section_title.setText(title)
+        # self.add_items_to_model(name.lower(), [f"{name} ID", "User ID", "Book ID", "Lenbd Date", "Expire Date"]) # Add items to the model
 
     def exit_button_clicked(self):
         print("Exit button clicked")
@@ -216,6 +225,16 @@ class Ui_MainWindow(object):
         print("OK button clicked")
         QtWidgets.qApp.quit()
 
+    def books_menu_clicked_new(self):
+        name = "Books"
+        dialog = QtWidgets.QDialog()
+        dialog.ui = AddBook()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+        # dialog.show()
+
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -224,10 +243,10 @@ class Ui_MainWindow(object):
         self.butt_books.setText(_translate("MainWindow", "Books"))
         self.butt_users.setText(_translate("MainWindow", "Users"))
         self.butt_stack.setText(_translate("MainWindow", "Stack"))
-        self.butt_order.setText(_translate("MainWindow", "Order"))
+        self.butt_order.setText(_translate("MainWindow", "Lend"))
         self.butt_ok.setText(_translate("MainWindow", "OK"))
         self.butt_exit.setText(_translate("MainWindow", "Exit"))
-        self.section_title.setText(_translate("MainWindow", "Title"))
+        self.section_title.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Title</span></p></body></html>"))
         self.menuNew.setTitle(_translate("MainWindow", "New"))
         self.menuDelete.setTitle(_translate("MainWindow", "Delete"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
@@ -238,18 +257,112 @@ class Ui_MainWindow(object):
         self.actionDeleteUser.setText(_translate("MainWindow", "User"))
         self.actionEditBook.setText(_translate("MainWindow", "Book"))
         self.actionEditUser.setText(_translate("MainWindow", "User"))
-        self.actionNewOrder.setText(_translate("MainWindow", "Order"))
-        self.actionDeleteOrder.setText(_translate("MainWindow", "Order"))
+        self.actionNewOrder.setText(_translate("MainWindow", "Lend"))
+        # self.actionDeleteOrder.setText(_translate("MainWindow", "Lend"))
         self.actionDeleteStack.setText(_translate("MainWindow", "Stack"))
         self.actionNewStack.setText(_translate("MainWindow", "Stack"))
-        self.actionEditOrder.setText(_translate("MainWindow", "Order"))
+        # self.actionEditOrder.setText(_translate("MainWindow", "Lend"))
         self.actionEditStack.setText(_translate("MainWindow", "Stack"))
         self.actionViewBook.setText(_translate("MainWindow", "Book"))
         self.actionViewUser.setText(_translate("MainWindow", "User"))
-        self.actionViewOrder.setText(_translate("MainWindow", "Order"))
+        # self.actionViewOrder.setText(_translate("MainWindow", "Lend"))
         self.actionViewStack.setText(_translate("MainWindow", "Stack"))
 import figure_rc
 
+class Ui_Dialog_Add_Book(object):
+    def setupUi(self, Dialog):
+        self.Dialog = Dialog
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(749, 463)
+        self.gridLayout = QtWidgets.QGridLayout(Dialog)
+        self.gridLayout.setObjectName("gridLayout")
+        self.the_title = QtWidgets.QLabel(Dialog)
+        self.the_title.setObjectName("the_title")
+        self.gridLayout.addWidget(self.the_title, 0, 0, 1, 2)
+        self.the_error = QtWidgets.QLabel(Dialog)
+        self.the_error.setObjectName("the_error")
+        self.gridLayout.addWidget(self.the_error, 1, 0, 1, 2)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.label_1 = QtWidgets.QLabel(Dialog)
+        self.label_1.setObjectName("label_1")
+        self.verticalLayout_3.addWidget(self.label_1, 0, QtCore.Qt.AlignRight)
+        self.label_2 = QtWidgets.QLabel(Dialog)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout_3.addWidget(self.label_2, 0, QtCore.Qt.AlignRight)
+        self.label_3 = QtWidgets.QLabel(Dialog)
+        self.label_3.setObjectName("label_3")
+        self.verticalLayout_3.addWidget(self.label_3, 0, QtCore.Qt.AlignRight)
+        self.horizontalLayout.addLayout(self.verticalLayout_3)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.input_1 = QtWidgets.QLineEdit(Dialog)
+        self.input_1.setInputMask("")
+        self.input_1.setPlaceholderText("")
+        self.input_1.setClearButtonEnabled(False)
+        self.input_1.setObjectName("input_1")
+        self.verticalLayout_4.addWidget(self.input_1)
+        self.input_2 = QtWidgets.QLineEdit(Dialog)
+        self.input_2.setInputMask("")
+        self.input_2.setPlaceholderText("")
+        self.input_2.setClearButtonEnabled(False)
+        self.input_2.setObjectName("input_2")
+        self.verticalLayout_4.addWidget(self.input_2)
+        self.input_3 = QtWidgets.QLineEdit(Dialog)
+        self.input_3.setInputMask("")
+        self.input_3.setPlaceholderText("")
+        self.input_3.setClearButtonEnabled(False)
+        self.input_3.setObjectName("input_3")
+        self.verticalLayout_4.addWidget(self.input_3)
+        self.horizontalLayout.addLayout(self.verticalLayout_4)
+        self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 2)
+        self.button_cancel = QtWidgets.QPushButton(Dialog)
+        self.button_cancel.setObjectName("button_cancel")
+        self.gridLayout.addWidget(self.button_cancel, 2, 0, 1, 1)
+        self.button_ok = QtWidgets.QPushButton(Dialog)
+        self.button_ok.setObjectName("button_ok")
+        self.gridLayout.addWidget(self.button_ok, 2, 1, 1, 1)
+
+        self.button_cancel.clicked.connect(self.exit_button_clicked)
+        self.button_ok.clicked.connect(self.ok_button_clicked)
+
+
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def exit_button_clicked(self):
+        print("Exit button clicked")
+        self.Dialog.close()
+
+    def ok_button_clicked(self):
+        x = []
+        x.append(self.input_1.text())
+        x.append(self.input_2.text())
+        x.append(self.input_3.text())
+        print("OK button clicked")
+        for i in range(len(x)):
+            print(x[i], end = ' ')
+            if x[i] == '':
+                err = f"Fields cannot be empty!"
+                text = f"<p align=\"center\"><span style=\" font-size:12pt; font-weight:600;\">{err}</span></p>"
+                print(err)
+                self.the_title.setText(text)
+                return
+            else:
+                print()
+                print(tuple(x))
+                self.Dialog.close()
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Add Book"))
+        self.the_title.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600;\">Add new book to the database</span></p></body></html>"))
+        self.label_1.setText(_translate("Dialog", "Book Name"))
+        self.label_2.setText(_translate("Dialog", "Author Name"))
+        self.label_3.setText(_translate("Dialog", "Publisher"))
+        self.button_cancel.setText(_translate("Dialog", "Cancel"))
+        self.button_ok.setText(_translate("Dialog", "OK"))
 
 if __name__ == "__main__":
     import sys

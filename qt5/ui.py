@@ -6,8 +6,8 @@ from dialogs import Ui_Dialog_Add_Book as AddBook
 from dialogs import Ui_Dialog_Add_User as AddUser
 from dialogs import Ui_Dialog_Search_Book as SearchBook
 from dialogs import Ui_Dialog_Search_User as SearchUser
-from dialogs import Ui_Dialog_Edit_Book as EditBook
-from dialogs import Ui_Dialog_Edit_User as EditUser
+# from dialogs import Ui_Dialog_Edit_Book as EditBook
+# from dialogs import Ui_Dialog_Edit_User as EditUser
 
 db = database("test")
 
@@ -116,35 +116,20 @@ class Ui_MainWindow(object):
         self.menuNew.addAction(self.actionNewLend)
         # }}}
 
-        # delete{{{
-        self.menuDelete = QtWidgets.QMenu(self.menubar)
-        self.menuDelete.setObjectName("menuDelete")
+        # # edit{{{
+        # self.menuEdit = QtWidgets.QMenu(self.menubar)
+        # self.menuEdit.setObjectName("menuEdit")
 
-        self.actionDeleteBook = QtWidgets.QAction(MainWindow)
-        self.actionDeleteBook.setObjectName("actionDeleteBook")
+        # self.actionEditBook = QtWidgets.QAction(MainWindow)
+        # self.actionEditBook.setObjectName("actionEditBook")
 
-        self.actionDeleteUser = QtWidgets.QAction(MainWindow)
-        self.actionDeleteUser.setObjectName("actionDeleteUser")
+        # self.actionEditUser = QtWidgets.QAction(MainWindow)
+        # self.actionEditUser.setObjectName("actionEditUser")
 
-        self.menubar.addAction(self.menuDelete.menuAction())
-        self.menuDelete.addAction(self.actionDeleteBook)
-        self.menuDelete.addAction(self.actionDeleteUser)
-        # }}}
-
-        # edit{{{
-        self.menuEdit = QtWidgets.QMenu(self.menubar)
-        self.menuEdit.setObjectName("menuEdit")
-
-        self.actionEditBook = QtWidgets.QAction(MainWindow)
-        self.actionEditBook.setObjectName("actionEditBook")
-
-        self.actionEditUser = QtWidgets.QAction(MainWindow)
-        self.actionEditUser.setObjectName("actionEditUser")
-
-        self.menubar.addAction(self.menuEdit.menuAction())
-        self.menuEdit.addAction(self.actionEditBook)
-        self.menuEdit.addAction(self.actionEditUser)
-        # }}}
+        # self.menubar.addAction(self.menuEdit.menuAction())
+        # self.menuEdit.addAction(self.actionEditBook)
+        # self.menuEdit.addAction(self.actionEditUser)
+        # # }}}
 
         # search{{{
         self.menuSearch = QtWidgets.QMenu(self.menubar)
@@ -168,14 +153,14 @@ class Ui_MainWindow(object):
         # signals {{{
 
         # menu signals{{{
-        self.actionNewUser.triggered.connect(self.users_menu_clicked_new)
-        self.actionNewBook.triggered.connect(self.books_menu_clicked_new)
+        self.actionNewUser.triggered.connect(self.menu_users_clicked_new)
+        self.actionNewBook.triggered.connect(self.menu_books_clicked_new)
 
-        self.actionSearchBook.triggered.connect(self.books_menu_clicked_search)
-        self.actionSearchUser.triggered.connect(self.users_menu_clicked_search)
+        self.actionSearchBook.triggered.connect(self.menu_books_clicked_search)
+        self.actionSearchUser.triggered.connect(self.menu_users_clicked_search)
 
-        self.actionEditUser.triggered.connect(self.users_menu_clicked_edit)
-        self.actionEditBook.triggered.connect(self.books_menu_clicked_edit)
+        # self.actionEditUser.triggered.connect(self.menu_users_clicked_edit)
+        # self.actionEditBook.triggered.connect(self.menu_books_clicked_edit)
         # }}}
 
         # button signals{{{
@@ -200,29 +185,66 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    # main gui table
     def add_items_to_model(self, name, cols):
         # Add items to the model
         self.model.clear()
         self.model.setHorizontalHeaderLabels(cols)
         x = []
-        rows = []
         tmp = db.table_sort(f"{name}", "*", "id")
         for i in tmp:
             x.append(list(i))
         for i in range(len(x)):
             for j in range(len(x[i])):
                 x[i][j] = QtGui.QStandardItem(str(x[i][j]))
-            rows.append(x[i])
             self.model.appendRow(x[i])
+        self.model.setVerticalHeaderLabels([''] * len(x))
 
     # signal functions {{{
 
     def books_button_clicked(self):
         name = "Books"
-        print(f"{name} button clicked")
+        # print(f"{name} button clicked")
         title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
         self.section_title.setText(title)
-        self.add_items_to_model(name.lower(), [f"{name} ID", "Name", "Author", "Publisher"]) # Add items to the model
+
+        name = name.lower() 
+        cols = ["Name", "Author", "Publisher"]
+        self.model.clear()
+        self.model.setHorizontalHeaderLabels(cols)
+        x = []
+        tmp = db.table_sort(f"{name}", "*", "id")
+
+        id_numbers = []
+        for i in tmp:
+            id_numbers.append(str(i[0]))
+
+        x = []
+        y = []
+        for i in range(len(tmp)):
+            for j in range(1, len(tmp[i])):
+                print(tmp[i][j])
+                x.append(QtGui.QStandardItem(tmp[i][j]))
+            print()
+            y.append(x)
+            x = []
+
+        print(y)
+
+        for i in y:
+            self.model.appendRow(i)
+
+        # for i in tmp:
+        #     x.append(list(i))
+        # for i in range(1, len(x)):
+        #     for j in range(1, len(x[i])):
+        #         x[i][j] = QtGui.QStandardItem(str(x[i][j]))
+        #     print(x[i])
+            # self.model.appendRow(x[1:i])
+
+        self.model.setVerticalHeaderLabels(id_numbers)
+
+        # self.add_items_to_model(name.lower(), [f"{name} ID", "Name", "Author", "Publisher"]) # Add items to the model
 
     def users_button_clicked(self):
         name = "Users"
@@ -253,83 +275,83 @@ class Ui_MainWindow(object):
         print("OK button clicked")
         QtWidgets.qApp.quit()
 
-    def users_menu_clicked_search(self):
-        name = "Users"
+    def menu_users_clicked_search(self):
         dialog = QtWidgets.QDialog()
         dialog.ui = SearchUser()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 
-    def books_menu_clicked_search(self):
-        name = "Books"
+    def menu_books_clicked_search(self):
         dialog = QtWidgets.QDialog()
         dialog.ui = SearchBook()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 
-    def users_menu_clicked_new(self):
-        name = "Users"
+    def menu_users_clicked_new(self):
         dialog = QtWidgets.QDialog()
         dialog.ui = AddUser()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 
-    def books_menu_clicked_new(self):
-        name = "Books"
+    def menu_books_clicked_new(self):
         dialog = QtWidgets.QDialog()
         dialog.ui = AddBook()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 
-    def users_menu_clicked_edit(self):
-        name = "Users"
-        dialog = QtWidgets.QDialog()
-        dialog.ui = EditUser()
-        dialog.ui.setupUi(dialog)
-        dialog.exec_()
+    # def menu_users_clicked_edit(self):
+    #     dialog = QtWidgets.QDialog()
+    #     dialog.ui = EditUser()
+    #     dialog.ui.setupUi(dialog)
+    #     dialog.exec_()
 
-    def books_menu_clicked_edit(self):
-        name = "Books"
-        dialog = QtWidgets.QDialog()
-        dialog.ui = EditBook()
-        dialog.ui.setupUi(dialog)
-        dialog.exec_()
+    # def menu_books_clicked_edit(self):
+    #     dialog = QtWidgets.QDialog()
+    #     dialog.ui = EditBook()
+    #     dialog.ui.setupUi(dialog)
+    #     dialog.exec_()
 
     # }}}
 
+    # display texts
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
+        # window title
         MainWindow.setWindowTitle(_translate("MainWindow", "Book Store"))
+        # logo
         self.logo.setText(_translate("MainWindow", "<html><head/><body><p><img src=\":/mainlogo/logo.png\"/></p></body></html>"))
+        # logo text
         self.text.setText(_translate("MainWindow", "Library app"))
+        # buttons
         self.butt_books.setText(_translate("MainWindow", "Books"))
         self.butt_users.setText(_translate("MainWindow", "Users"))
         self.butt_stack.setText(_translate("MainWindow", "Stack"))
+        # self.butt_lend.setText(_translate("MainWindow", ""))
         self.butt_lend.setText(_translate("MainWindow", "Lend"))
         self.butt_ok.setText(_translate("MainWindow", "OK"))
         self.butt_exit.setText(_translate("MainWindow", "Exit"))
+        # table title
         self.section_title.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">Title</span></p></body></html>"))
 
+        # menu list
         self.menuNew.setTitle(_translate("MainWindow", "New"))
         self.actionNewBook.setText(_translate("MainWindow", "Book"))
         self.actionNewUser.setText(_translate("MainWindow", "User"))
         self.actionNewLend.setText(_translate("MainWindow", "Lend"))
 
-        self.menuDelete.setTitle(_translate("MainWindow", "Delete"))
-        self.actionDeleteBook.setText(_translate("MainWindow", "Book"))
-        self.actionDeleteUser.setText(_translate("MainWindow", "User"))
-
-        self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
-        self.actionEditBook.setText(_translate("MainWindow", "Book"))
-        self.actionEditUser.setText(_translate("MainWindow", "User"))
+        # self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
+        # self.actionEditBook.setText(_translate("MainWindow", "Book"))
+        # self.actionEditUser.setText(_translate("MainWindow", "User"))
 
         self.menuSearch.setTitle(_translate("MainWindow", "Search"))
         self.actionSearchBook.setText(_translate("MainWindow", "Book"))
         self.actionSearchUser.setText(_translate("MainWindow", "User"))
         self.actionSearchStack.setText(_translate("MainWindow", "Stack"))
 
+# logo image
 import figure_rc
 
+# execute program
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -338,3 +360,20 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    """
+
+    """

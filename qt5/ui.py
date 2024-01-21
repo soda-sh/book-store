@@ -6,6 +6,8 @@ from dialogs import Ui_Dialog_Add_Book as AddBook
 from dialogs import Ui_Dialog_Add_User as AddUser
 from dialogs import Ui_Dialog_Search_Book as SearchBook
 from dialogs import Ui_Dialog_Search_User as SearchUser
+from dialogs import Ui_Dialog_Edit_Book as EditBook
+from dialogs import Ui_Dialog_Edit_User as EditUser
 
 db = database("test")
 
@@ -171,6 +173,9 @@ class Ui_MainWindow(object):
 
         self.actionSearchBook.triggered.connect(self.books_menu_clicked_search)
         self.actionSearchUser.triggered.connect(self.users_menu_clicked_search)
+
+        self.actionEditUser.triggered.connect(self.users_menu_clicked_edit)
+        self.actionEditBook.triggered.connect(self.books_menu_clicked_edit)
         # }}}
 
         # button signals{{{
@@ -273,6 +278,20 @@ class Ui_MainWindow(object):
         name = "Books"
         dialog = QtWidgets.QDialog()
         dialog.ui = AddBook()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
+    def users_menu_clicked_edit(self):
+        name = "Users"
+        dialog = QtWidgets.QDialog()
+        dialog.ui = EditUser()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
+    def books_menu_clicked_edit(self):
+        name = "Books"
+        dialog = QtWidgets.QDialog()
+        dialog.ui = EditBook()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 

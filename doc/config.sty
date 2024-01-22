@@ -86,12 +86,13 @@
 % }}}
 
 % persian + settings {{{
-\usepackage{xepersian}
-\settextfont{Yas}
+\usepackage[extrafootnotefeatures,perpagefootnote=on]{xepersian}
+% \settextfont{Yas}
+\settextfont[Scale=1.2]{Yas}
 \setlatintextfont{FreeSerif}
 \setlatinmonofont{Ubuntu Mono}
 \defpersianfont\titlefont{HMXKayhan}
-
+\TwoColumnFootnotes
 
 \usepackage{ptext}
 % }}}
@@ -142,7 +143,7 @@
 }
 % }}}
 
-\linespread{1.3}
+\linespread{2.0}
 
 % toc and counters {{{
 \counterwithin{figure}{part}

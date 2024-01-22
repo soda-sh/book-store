@@ -1,46 +1,96 @@
-% tmp {{{
 \part{مقدمه}
-\section{مقداری متن آزمایشی}
 
-\ptext[5]
+کتابخانه‌های عمومی یک از مراکزی هستند که استفاده از پایگاه‌های داده
+می‌تواند کمک شایانی در مدیریت و مرتب کردن لیست کتاب‌ها و کاربرها
+کند. همچنین مدیریت کتاب‌های امانت گرفته شده و کاربرهایی که عضو
+کتابخانه هستند با استفاده از پایگاه‌داده و در کل برنامه‌های کامپیوتری
+بسیار کمک کننده هستند و باعث بیشتر شدن بازدهی می‌شوند.
 
-\section{بخش}
+زبان برنامه‌نویسی پایتون به دلیل سادگی سینتکس و شی‌گرا بودن، یکی از
+گزینه‌های مناسب برای نوشتن این برنامه است. سادگی زبان و درعین حال شی‌گرا
+بودن پایتون باعث می‌شود درحالی که نوشتن برنامه اولیه بسیار آسان و ساده
+باشد، نگه‌داری برنامه برای استفاده بلند مدت از برنامه مناسب است. همچنین
+وجود کتابخانه‌ها و ماژول‌های بسیار زیاد نوشته شده برای پایتون، باعث
+می‌شود پایتون را گزینه مناسبی برای ساختن برنامه‌های مختلف در حوزه‌های
+بسیار زیادی می‌کند.
 
-\begin{src}[نمونه]
-\begin{minted}{python}
-#!/bin/python
-max = 10
-inrange = max + 1
-base = 1
+به دلیل محبوبیت پایتون در بین برنامه‌نویس‌ها، برنامه‌های جانبی بسیار
+زیادی برای کمک کردن به برنامه‌نویس ساخته شده است. یک نمونه از این برنامه‌ها
+که در نوشتن کدها استفاده شد \textit{پای‌رایت}\LTRfootnote{PyRight} است که یک
+\textit{ال‌اس‌پی} \LTRfootnote{LSP (Language Server Protocol)} می‌باشد. کار این
+برنامه‌ها بررسی کدهای نوشته شده و شناسایی کلمات کلیدی، نوع کلمات کلیدی
+و محلی که تعریف یا استفاده شده‌اند می‌باشد که کار برنامه‌نویس را هنگام
+عیب‌یابی برنامه، بسیار سریعتر و پربازده‌تر می‌کنند.
 
-for i in range(base, inrange):
-	for j in range(base, inrange):
-		print(i * j, end = "\t")
-	print("\n")
-\end{minted}
-\end{src}
+ویرایشگر ویم یک برنامه \textit{تحت متن}
+\LTRfootnote{TUI (Text-based User Interface)}
+می‌باشد که قابلیت \textit{برنامه‌نویسی شدن}\LTRfootnote{Programable}
+را دارد. این قابل برنامه‌نویسی بودن ویم باعث شده که کاربرهای این برنامه
+\textit{افزونه}‌های\LTRfootnote{Plugins} بسیار زیادی برای انجام بهتر و سریعتر
+کارهایشان بنویسند و بصورت عمومی برای استفاده دیگر برنامه‌نویس‌ها منتشر
+کنند. بعنوان مثال قابلیت استفاده از پای‌رایت در ویم توسط یک پلاگین به
+آن اضافه می‌شود. همچنین ویم قابلیت شخصی‌سازی بسیار بالایی دارد که
+برنامه‌نویس‌ها می‌توانند دقیقا بسته به نیاز و علایق‌شان آن را تغییر دهند و
+شخصی‌سازی کنند.
 
-\begin{figure}[ht!]
-	\centering
-	\caption{یک عکس نمونه}
-	\includegraphics[width=0.2\textwidth]{/home/hos/pictures/test.png}
-\end{figure}
+% \ThreeColumnFootnotes
+\vfill\newpage
 
-\begin{table}[ht!]
-	\centering
-	\begin{tabular}{ccc}
-		\hline
-		\textbf{یک} & \textbf{دو} & \textbf{سه} \\
-		\hline
-		نمونه & شماره & یک \\
-		در حال & تست & شدن \\
-		\hline
-	\end{tabular}
-	\caption{یک جدول آزمایشی}
-\end{table}
+\section{زبان پایتون}
 
-\subsection{زیربخش}
-\subsection{زیربخش}
-\subsection{زیربخش}
-\subsubsection{زیرزیربخش}
-% }}}
+پایتون یک زبان برنامه نویسی سطح بالا و همه منظوره است. فلسفه طراحی آن
+بر خوانایی کد با استفاده از \textit{تورفتگی}\LTRfootnote{Indentation} قابل توجه تأکید دارد. پایتون به
+صورت \textit{تایپ پویا}\LTRfootnote{Dynamic-types} می‌باشد و دارای \textit{گاربج کالکتور}\LTRfootnote{Garbage collector} است.
+این پارادایم های برنامه نویسی متعدد،
+از جمله برنامه نویسی \textit{ساختاریافته}\LTRfootnote{structured}،
+\textit{شی‌گرا}\LTRfootnote{Object orianted} و \textit{تابعی}\LTRfootnote{Functional} را
+پشتیبانی می‌کند. به دلیل کتابخانه استاندارد جامع آن، اغلب به عنوان یک
+زبان «همراه با باتری» توصیف می شود. \textit{خیدو فان روسوم}\LTRfootnote{Guido van Rossum} در اواخر دهه 1980
+کار بر روی پایتون را به عنوان جانشین زبان برنامه نویسی \textit{ای‌بی‌سی}\LTRfootnote{ABC} آغاز کرد و
+اولین بار در سال 1991 آن را با نام پایتون ۰.۹.۰ منتشر کرد.
+پایتون 0.3 در سال 2000 منتشر شد. پایتون 0.3 که در سال 2008 منتشر شد، یک نسخه اصلی
+بود که کاملاً با نسخه‌های قبلی سازگار نبود.
+
+پایتون به‌جای ساختن تمام قابلیت‌های خود در هسته‌اش، به گونه‌ای طراحی شد که
+از طریق ماژول‌ها بسیار توسعه‌پذیر باشد. این ماژولار بودن فشرده آن را به
+عنوان وسیله ای برای افزودن رابط های قابل برنامه ریزی به برنامه های
+موجود محبوب کرده است. این دیدگاه ون روسوم از یک زبان اصلی کوچک با یک
+کتابخانه استاندارد بزرگ و یک مترجم به راحتی قابل توسعه، ناشی از
+ناامیدی او از ای‌بی‌سی بود، که از رویکرد مخالف حمایت می کرد.
+
+
+% \TwoColumnFootnotes
+
+% % tmp {{{
+% \begin{src}[نمونه]
+% \begin{minted}{python}
+% class Ui_MainWindow(object):
+%     def setupUi(self, MainWindow):
+%         MainWindow.setObjectName("MainWindow")
+%         MainWindow.setWindowModality(QtCore.Qt.NonModal)
+%         MainWindow.resize(789, 592)
+%         self.centralwidget = QtWidgets.QWidget(MainWindow)
+%         self.centralwidget.setObjectName("centralwidget")
+%         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+% \end{minted}
+% \end{src}
+
+% \begin{figure}[ht!]
+%     \centering
+%     \caption{یک عکس نمونه}
+%     \includegraphics[width=0.2\textwidth]{/home/hos/pictures/test.png}
+% \end{figure}
+
+% \begin{table}[ht!]
+%     \centering
+%     \begin{tabular}{ccc}
+%         \hline
+%         \textbf{یک} & \textbf{دو} & \textbf{سه} \\
+%         \hline
+%         نمونه & شماره & یک \\
+%         در حال & تست & شدن \\
+%         \hline
+%     \end{tabular}
+%     \caption{یک جدول آزمایشی}
+% \end{table}
+% % }}}

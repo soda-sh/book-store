@@ -569,7 +569,7 @@ class Ui_Dialog_Search_User(object):
                     else:
                         qprint(f"User deleted")
 
-            self.Dialog.close()
+            # self.Dialog.close()
         else:
             qprint("You need to enter a value")
 
@@ -955,7 +955,7 @@ class Ui_Dialog_Search_Book(object):
                     else:
                         qprint(f"Book deleted")
 
-            self.Dialog.close()
+            # self.Dialog.close()
         else:
             qprint("You need to enter a value")
 
@@ -1247,7 +1247,7 @@ class Ui_Dialog_Search_Stack(object):
                     else:
                         qprint(f"Stack deleted")
 
-            self.Dialog.close()
+            # self.Dialog.close()
         else:
             qprint("You need to enter a value")
 

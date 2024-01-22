@@ -46,20 +46,20 @@ class database():
 
     # create table {{{
     def table_create(self, name, rows):
-        # tmp = ""
-        # self.cursor.execute("SHOW TABLES")
-        # not_exists = True
-        # for i in self.cursor:
-        #     for j in i:
-        #         if j != name:
-        #             not_exists = False
-        # if not_exists: # create table if does not exists
+        tmp = ""
+        self.cursor.execute("SHOW TABLES")
+        not_exists = True
+        for i in self.cursor:
+            for j in i:
+                if j != name:
+                    not_exists = False
+        if not_exists: # create table if does not exists
             sql = f"CREATE TABLE {name} (id INT AUTO_INCREMENT PRIMARY KEY, {rows})"
             self.cursor.execute(sql)
             tmp = f"table created: {name}"
-        # else:
-        #     tmp = f"table exists: {name}"
-        # return tmp
+        else:
+            tmp = f"table exists: {name}"
+        return tmp
     # }}}
 
     # insert into table {{{
@@ -69,7 +69,6 @@ class database():
 
         self.db.commit() # this is required to make the changes, otherwise no changes are made to the table
         tmp = self.cursor.rowcount
-        print("1 record inserted, ID:", self.cursor.lastrowid)
         return tmp
     # }}}
 
@@ -78,9 +77,6 @@ class database():
         self.cursor.execute(f"SELECT {key} FROM {name}")
         tmp = self.cursor.fetchone()
         return tmp
-        # print(tmp)
-        # for key in tmp:
-        #     print(key)
     # }}}
 
     # filter table {{{
@@ -89,9 +85,6 @@ class database():
         self.cursor.execute(sql)
         tmp = self.cursor.fetchall()
         return tmp
-        # print(tmp)
-        # for key in tmp:
-        #     print(key)
 
     # }}}
 
@@ -101,9 +94,6 @@ class database():
         self.cursor.execute(sql)
         tmp = self.cursor.fetchall()
         return tmp
-        # print(tmp)
-        # for key in tmp:
-        #     print('\t', key)
     # }}}
 
     # delete table {{{
@@ -133,16 +123,14 @@ class database():
     
     # }}}
 
+database_name = "test"
+tmp = database(database_name)
 
-tmp = database("test")
+tmp.table_create("users", "username VARCHAR(255), address VARCHAR(255), phone VARCHAR(255)")
+tmp.table_create("books", "book VARCHAR(255), author VARCHAR(255), publisher VARCHAR(255)")
+tmp.table_create("stack", "user_id VARCHAR(255), book_id VARCHAR(255), date VARCHAR(255)")
 
-# for i in ["users", "books", "lend", "stack"]:
-#     tmp.table_drop(i)
-
-# print(tmp.table_create("users", "username VARCHAR(255), address VARCHAR(255), phone VARCHAR(255)"))
-# print(tmp.table_create("books", "book VARCHAR(255), author VARCHAR(255), publisher VARCHAR(255)"))
-# print(tmp.table_create("stack", "user_id VARCHAR(255), book_id VARCHAR(255), date VARCHAR(255)"))
-# # print(tmp.table_create("lend", "user_id VARCHAR(255), book_id VARCHAR(255), lend_date VARCHAR(255), expire_date VARCHAR(255)"))
+# # tests {{{
 
 # # insert dump data
 # dmp_users = [
@@ -169,20 +157,19 @@ tmp = database("test")
 #     test = tmp.table_insert("stack", "(user_id, book_id, date)", tuple(i))
 #     print(tuple(i))
 
-test = []
+# test = []
 
 # test = tmp.table_select("users", "username")
 # test = tmp.table_filter("books", "*", "book", "'Simple book'")
 # test = tmp.table_insert("customers", "(name, address)", ("John", "Highway 21"))
 # test = tmp.table_delete("customers", "*", "52")
-# test = tmp.table_sort("books", "*", "id") # apend ` DESC` to reversed sort
 # test = tmp.table_delete("customers", "id", "51")
+# test = tmp.table_sort("books", "*", "id") # apend ` DESC` to reversed sort
 # test = tmp.table_update("books", "id = 1", "book = 'Simple book', author = 'Who Knows', publisher = 'TodayLand'")
 
-test = tmp.table_filter("stack", "*", "id", "1")
-for key in test:
-    print(key)
+# test = tmp.table_filter("stack", "*", "id", "1")
+# for key in test:
+#     print(key)
 
-
-# tmp.table_drop("books")
+# # }}}
 

@@ -53,7 +53,6 @@ class Ui_Dialog_View(object):
                 value.append(self.value[i:i+4])
             for i in value:
                 if i != []:
-                    print(i)
                     self.model.appendRow(i)
             self.model.setVerticalHeaderLabels([''] * len(value))
 
@@ -495,7 +494,6 @@ class Ui_Dialog_Search_User(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def exit_button_clicked(self):
-        # print("Exit button clicked")
         self.Dialog.close()
 
     def ok_button_clicked(self):
@@ -695,12 +693,6 @@ class Ui_Dialog_Edit_User(object):
                     # row_data.append("")  # Handle the case when the item is None
             updated_data.append(row_data)
 
-        # Print the updated data
-        # print("Updated Data:")
-        # data = []
-        # for row in updated_data:
-        #     data.append(row)
-
         sql_data = f"username = '{updated_data[0][0]}', address = '{updated_data[0][1]}', phone = '{updated_data[0][2]}'"
         qprint(str(sql_data))
         err = db.table_update(table, f"{search} = {tmp}", sql_data)
@@ -782,7 +774,6 @@ class Ui_Dialog_Add_Book(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def exit_button_clicked(self):
-        # print("Exit button clicked")
         self.Dialog.close()
 
     def ok_button_clicked(self):
@@ -889,7 +880,6 @@ class Ui_Dialog_Search_Book(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def exit_button_clicked(self):
-        # print("Exit button clicked")
         self.Dialog.close()
 
     def ok_button_clicked(self):
@@ -1216,8 +1206,6 @@ class Ui_Dialog_Search_Stack(object):
                     self.search_book = "date"
 
             search = self.search_book
-
-            print(f"{table} {search} {tmp}")
 
             match operation[0]:
                 case "View":

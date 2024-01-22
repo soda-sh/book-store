@@ -2,12 +2,19 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from database import database
+
 from dialogs import Ui_Dialog_Add_Book as AddBook
 from dialogs import Ui_Dialog_Add_User as AddUser
+from dialogs import Ui_Dialog_Add_Stack as AddStack
+
 from dialogs import Ui_Dialog_Search_Book as SearchBook
 from dialogs import Ui_Dialog_Search_User as SearchUser
-# from dialogs import Ui_Dialog_Edit_Book as EditBook
-# from dialogs import Ui_Dialog_Edit_User as EditUser
+from dialogs import Ui_Dialog_Search_Stack as SearchStack
+
+from dialogs import Ui_Dialog_Main_View_Book as ViewBook
+from dialogs import Ui_Dialog_Main_View_User as ViewUser
+from dialogs import Ui_Dialog_Main_View_Stack as ViewStack
+
 
 db = database("test")
 
@@ -87,7 +94,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.section_title)
         self.tableView = QtWidgets.QTableView(self.centralwidget)
         self.tableView.setObjectName("tableView")
-        self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  # Make the table non-editable
+        self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers) # Make the table non-editable
         self.model = QtGui.QStandardItemModel() # Create a QStandardItemModel
         self.tableView.setModel(self.model)
         self.verticalLayout_4.addWidget(self.tableView)
@@ -155,9 +162,11 @@ class Ui_MainWindow(object):
         # menu signals{{{
         self.actionNewUser.triggered.connect(self.menu_users_clicked_new)
         self.actionNewBook.triggered.connect(self.menu_books_clicked_new)
+        self.actionNewLend.triggered.connect(self.menu_lend_clicked_new)
 
         self.actionSearchBook.triggered.connect(self.menu_books_clicked_search)
         self.actionSearchUser.triggered.connect(self.menu_users_clicked_search)
+        self.actionSearchStack.triggered.connect(self.menu_stack_clicked_search)
 
         # self.actionEditUser.triggered.connect(self.menu_users_clicked_edit)
         # self.actionEditBook.triggered.connect(self.menu_books_clicked_edit)
@@ -185,105 +194,47 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    # main gui table
-    def add_items_to_model(self, name, cols):
-        # Add items to the model
-        self.model.clear()
-        self.model.setHorizontalHeaderLabels(cols)
-        x = []
-        tmp = db.table_sort(f"{name}", "*", "id")
-        for i in tmp:
-            x.append(list(i))
-        for i in range(len(x)):
-            for j in range(len(x[i])):
-                x[i][j] = QtGui.QStandardItem(str(x[i][j]))
-            self.model.appendRow(x[i])
-        self.model.setVerticalHeaderLabels([''] * len(x))
-
     # signal functions {{{
 
     def books_button_clicked(self):
         name = "Books"
-        # print(f"{name} button clicked")
-        title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
-        self.section_title.setText(title)
-
-        name = name.lower() 
         cols = ["Name", "Author", "Publisher"]
-        self.model.clear()
-        self.model.setHorizontalHeaderLabels(cols)
-        x = []
-        tmp = db.table_sort(f"{name}", "*", "id")
-
-        id_numbers = []
-        for i in tmp:
-            id_numbers.append(str(i[0]))
-
-        x = []
-        y = []
-        for i in range(len(tmp)):
-            for j in range(1, len(tmp[i])):
-                print(tmp[i][j])
-                x.append(QtGui.QStandardItem(tmp[i][j]))
-            print()
-            y.append(x)
-            x = []
-
-        print(y)
-
-        for i in y:
-            self.model.appendRow(i)
-
-        # for i in tmp:
-        #     x.append(list(i))
-        # for i in range(1, len(x)):
-        #     for j in range(1, len(x[i])):
-        #         x[i][j] = QtGui.QStandardItem(str(x[i][j]))
-        #     print(x[i])
-            # self.model.appendRow(x[1:i])
-
-        self.model.setVerticalHeaderLabels(id_numbers)
-
-        # self.add_items_to_model(name.lower(), [f"{name} ID", "Name", "Author", "Publisher"]) # Add items to the model
+        dialog = QtWidgets.QDialog()
+        dialog.ui = ViewBook(name, cols)
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
 
     def users_button_clicked(self):
         name = "Users"
-        print(f"{name} button clicked")
-        title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
-        self.section_title.setText(title)
-        self.add_items_to_model(name.lower(), [f"{name} ID", "Name", "Address", "Phone NO."]) # Add items to the model
+        cols = ["Name", "Address", "Phone NO."]
+        dialog = QtWidgets.QDialog()
+        dialog.ui = ViewUser(name, cols)
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
 
     def stack_button_clicked(self):
         name = "Stack"
-        print(f"{name} button clicked")
-        title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
-        self.section_title.setText(title)
-        self.add_items_to_model(name.lower(), [f"{name} ID", "User ID", "Book ID", "Date"]) # Add items to the model
+        cols = ["User ID", "Book ID", "Add date"]
+        dialog = QtWidgets.QDialog()
+        dialog.ui = ViewStack(name, cols)
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
 
     def lend_button_clicked(self):
-        name = "Lend"
-        print(f"{name} button clicked")
-        # title = f"<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">{name}</span></p></body></html>"
-        # self.section_title.setText(title)
-        # self.add_items_to_model(name.lower(), [f"{name} ID", "User ID", "Book ID", "Lenbd Date", "Expire Date"]) # Add items to the model
+        dialog = QtWidgets.QDialog()
+        dialog.ui = AddStack()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
 
     def exit_button_clicked(self):
-        print("Exit button clicked")
         QtWidgets.qApp.quit()
 
     def ok_button_clicked(self):
-        print("OK button clicked")
         QtWidgets.qApp.quit()
 
     def menu_users_clicked_search(self):
         dialog = QtWidgets.QDialog()
         dialog.ui = SearchUser()
-        dialog.ui.setupUi(dialog)
-        dialog.exec_()
-
-    def menu_books_clicked_search(self):
-        dialog = QtWidgets.QDialog()
-        dialog.ui = SearchBook()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 
@@ -293,9 +244,27 @@ class Ui_MainWindow(object):
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 
+    def menu_books_clicked_search(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = SearchBook()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
     def menu_books_clicked_new(self):
         dialog = QtWidgets.QDialog()
         dialog.ui = AddBook()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
+    def menu_stack_clicked_search(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = SearchStack()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+
+    def menu_lend_clicked_new(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = AddStack()
         dialog.ui.setupUi(dialog)
         dialog.exec_()
 

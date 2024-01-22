@@ -68,7 +68,7 @@ class database():
         self.cursor.execute(sql, value)
 
         self.db.commit() # this is required to make the changes, otherwise no changes are made to the table
-        tmp = self.cursor.rowcount, "was inserted."
+        tmp = self.cursor.rowcount
         print("1 record inserted, ID:", self.cursor.lastrowid)
         return tmp
     # }}}
@@ -179,6 +179,7 @@ test = []
 # test = tmp.table_delete("customers", "id", "51")
 # test = tmp.table_update("books", "id = 1", "book = 'Simple book', author = 'Who Knows', publisher = 'TodayLand'")
 
+test = tmp.table_filter("stack", "*", "id", "1")
 for key in test:
     print(key)
 

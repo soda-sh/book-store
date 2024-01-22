@@ -1,0 +1,188 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config}
+\RequirePackage{xcolor,fontspec,fancyvrb,titlesec,geometry,multicol,graphicx}
+
+% toc, lot, lol, lof, etc... {{{
+\usepackage{tocloft}
+\newlistof{listing}{lol}{List of Listings}
+\cftsetindents{section}{0em}{3em}
+\cftsetindents{subsection}{2em}{4em}
+\cftsetindents{subsubsection}{4em}{5em}
+
+% \renewcommand{\cftfigpresnum}{تصویر~}
+\cftsetindents{figure}{0em}{25pt}
+
+% \renewcommand{\cfttabpresnum}{جدول~}
+\cftsetindents{table}{0em}{25pt}
+
+% \renewcommand{\cftlistingpresnum}{کد~}
+\cftsetindents{listing}{0em}{25pt}
+% }}}
+
+% code block {{{
+\usepackage{caption}
+\usepackage[newfloat,cache=false]{minted}
+\usepackage[minted,most,breakable]{tcolorbox}
+
+\renewcommand{\theFancyVerbLine}{%
+	\ttfamily\textcolor[rgb]{0.5,0.5,0.5}{%
+		\tiny\oldstylenums{\arabic{FancyVerbLine}}%
+	}%
+}
+
+\definecolor{bg}{HTML}{cccccc}% #cccccc
+\definecolor{cb}{HTML}{eeeeee}% #eeeeee
+
+\setminted{
+	autogobble,
+	breaklines=true,
+	linenos=true,
+	numbersep=5pt,
+	mathescape,
+	fontsize=\footnotesize,
+	frame=leftline,
+}
+
+\usemintedstyle{bw}
+
+\newenvironment{src}[1][]{%
+	\begin{listing}[h]
+		\begin{tcolorbox}
+			\caption{#1}
+			\begin{latin}
+	}{%
+			\end{latin}
+		\end{tcolorbox}
+	\end{listing}
+}
+
+\SetupFloatingEnvironment{listing}{%
+	name={کد},
+	fileext=lol%
+}
+
+% }}}
+
+% links {{{
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+%	linkcolor={red!50!black},
+%	urlcolor={blue!50!black},
+%	citecolor={green!50!black},
+	allcolors={black},
+	pdftitle={database},
+}
+% }}}
+
+% geometry {{{
+\geometry{
+	a4paper,
+	right=3cm,
+	top=3cm,
+	left=2.5cm,
+	bottom=2.5cm,
+}
+% }}}
+
+% persian + settings {{{
+\usepackage{xepersian}
+\settextfont{Yas}
+\setlatintextfont{FreeSerif}
+\setlatinmonofont{Ubuntu Mono}
+\defpersianfont\titlefont{HMXKayhan}
+
+
+\usepackage{ptext}
+% }}}
+
+% extra page numberings {{{
+\newcounter{MyC}
+\newcommand{\addAdadi}{\adadi{MyC}\addtocounter{MyC}{1}\ }
+\newcommand{\addHarfi}{\harfi{MyC}\addtocounter{MyC}{1}\ }
+\newcommand{\addTartibi}{\tartibi{MyC}\addtocounter{MyC}{1}\ }
+% }}}
+
+% headings formating {{{
+% custom part
+\titleformat{\part}
+	{\huge\titlefont\bfseries}
+	{\thepart}
+	{.03\linewidth}
+	{}
+	[{\titlerule[0pt]}\vspace{10mm}]
+%% custom section
+\titleformat{\section}
+	{\LARGE\titlefont\bfseries}
+	{\thesection}
+	{.03\linewidth}
+	{}
+	[{\titlerule[0pt]}\vspace{07mm}]
+%% custom subsection
+\titleformat{\subsection}
+	{\Large\bfseries\titlefont}
+	{\thesubsection}
+	{.03\linewidth}
+	{}
+	[{\titlerule[0pt]}\vspace{04mm}]
+%% custom subsubsection
+\titleformat{\subsubsection}
+	{\large\titlefont\bfseries}
+	{\thesubsubsection}
+	{.03\linewidth}
+	{}
+	[{\titlerule[0pt]}\vspace{02mm}]
+% }}}
+
+% every part on new page {{{
+\usepackage{etoolbox}
+\preto{\part}{%
+	\ifnum\value{part}=0 \else\clearpage\fi
+	% \vfill\newpage
+}
+% }}}
+
+\linespread{1.3}
+
+% toc and counters {{{
+\counterwithin{figure}{part}
+\counterwithin{table}{part}
+\counterwithin{listing}{part}
+\counterwithin{section}{part}
+\counterwithin{subsection}{part}
+\counterwithin{subsubsection}{part}
+
+\renewcommand{\thepart}          {فصل \adadi{part} {}}
+\renewcommand{\thesection}       {\arabic{part}-\arabic{section} {}}
+\renewcommand{\thesubsection}    {\arabic{part}-\arabic{section}-\arabic{subsection} {}}
+\renewcommand{\thesubsubsection} {\arabic{part}-\arabic{section}-\arabic{subsection}-\arabic{subsubsection} {}}
+\renewcommand{\thefigure}  {\arabic{part}-\arabic{figure} {}}
+\renewcommand{\thetable}   {\arabic{part}-\arabic{table} {}}
+\renewcommand{\thelisting} {\arabic{part}-\arabic{listing} {}}
+
+\setcounter{tocdepth}{2} % 3 -> subsubsection
+
+% \makeatletter
+% \@ifundefined{float@listhead}{}{%
+% 	\renewcommand*{\lstlistoflistings}{%
+% 		\begingroup
+% 			\if@twocolumn
+% 				\@restonecoltrue\onecolumn
+% 			\else
+% 				\@restonecolfalse
+% 			\fi
+% 			\float@listhead{\lstlistlistingname}%
+% 			\setlength{\parskip}{\z@}%
+% 			\setlength{\parindent}{\z@}%
+% 			\setlength{\parfillskip}{\z@ \@plus 1fil}%
+% 			\@starttoc{lol}%
+% 			\if@restonecol\twocolumn\fi
+% 		\endgroup
+% 	}%
+% }
+% \makeatother
+
+\renewcommand{\lstlistingname}{\rl{کد}}
+\renewcommand{\lstlistlistingname}{\rl{فهرست کدها}}
+% }}}
+

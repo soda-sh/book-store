@@ -5,8 +5,8 @@ import mysql.connector as mc
 
 class database():
     # init {{{
-    def __init__(self):
-        self.database_name = "test"
+    def __init__(self, name):
+        self.database_name = name
         self.user = "book"
         self.password = "book"
         self.host = "localhost"
@@ -21,11 +21,12 @@ class database():
 
     # helper functions {{{
     def check_exists(self, name, kind):
-        exists = False
-        for key in kind:
-            if key[0] == name and exists == False:
-                return True
-        return False
+        not_exists = True
+        for i in kind:
+            for j in i:
+                if j != name and not_exists == True:
+                    not_exists = False
+        return not_exists
     # }}}
 
     # create database {{{
@@ -44,25 +45,30 @@ class database():
     # tables {{{
 
     # create table {{{
-    def table_create(self, name):
-        tmp = ""
-        self.cursor.execute("SHOW TABLES")
-        if not self.check_exists(name, self.cursor): # create table if does not exists
-            sql = f"CREATE TABLE {name} (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))"
+    def table_create(self, name, rows):
+        # tmp = ""
+        # self.cursor.execute("SHOW TABLES")
+        # not_exists = True
+        # for i in self.cursor:
+        #     for j in i:
+        #         if j != name:
+        #             not_exists = False
+        # if not_exists: # create table if does not exists
+            sql = f"CREATE TABLE {name} (id INT AUTO_INCREMENT PRIMARY KEY, {rows})"
             self.cursor.execute(sql)
             tmp = f"table created: {name}"
-        else:
-            tmp = f"table exists: {name}"
-        return tmp
+        # else:
+        #     tmp = f"table exists: {name}"
+        # return tmp
     # }}}
 
     # insert into table {{{
     def table_insert(self, name, key, value):
-        sql = f"INSERT INTO {name} {key} VALUES (%s, %s)"
+        sql = f"INSERT INTO {name} {key} VALUES (%s, %s, %s)"
         self.cursor.execute(sql, value)
 
         self.db.commit() # this is required to make the changes, otherwise no changes are made to the table
-        tmp = self.cursor.rowcount, "was inserted."
+        tmp = self.cursor.rowcount
         print("1 record inserted, ID:", self.cursor.lastrowid)
         return tmp
     # }}}
@@ -105,17 +111,16 @@ class database():
         sql = f"DELETE FROM {name} WHERE {key} = {value}"
         self.cursor.execute(sql)
         self.db.commit()
-        tmp = f"{self.cursor.rowcount} record(s) deleted"
-        return tmp
+        return self.cursor.rowcount
 
     # }}}
 
     # drop table {{{
     def table_drop(self, name):
-        sql = "DROP TABLE IF EXISTS {name}"
+        sql = f"DROP TABLE IF EXISTS {name}"
         self.cursor.execute(sql)
-        tmp = f"table {name} dropped"
-        return tmp
+        # tmp = f"table {name} dropped"
+        # return tmp
     # }}}
 
     # update table {{{
@@ -123,27 +128,61 @@ class database():
         sql = f"UPDATE {name} SET {new} WHERE {old}"
         self.cursor.execute(sql)
         self.db.commit()
-        tmp = f"{self.cursor.rowcount} record(s) affected"
-        return tmp
+        return self.cursor.rowcount
     # }}}
     
     # }}}
 
 
-# val = [('Peter', 'Lowstreet 4'), ('Peter', 'Lowstreet 4')]
-# val = ('Peter', 'Lowstreet 4'),
+tmp = database("test")
 
-tmp = database()
-# test = tmp.database_create()
-# test = tmp.table_create("customers")
-# test = tmp.table_select("customers", "id")
-# test = tmp.table_filter("customers", "*", "address", "'Park Lane 38'")
+# for i in ["users", "books", "lend", "stack"]:
+#     tmp.table_drop(i)
+
+# print(tmp.table_create("users", "username VARCHAR(255), address VARCHAR(255), phone VARCHAR(255)"))
+# print(tmp.table_create("books", "book VARCHAR(255), author VARCHAR(255), publisher VARCHAR(255)"))
+# print(tmp.table_create("stack", "user_id VARCHAR(255), book_id VARCHAR(255), date VARCHAR(255)"))
+# # print(tmp.table_create("lend", "user_id VARCHAR(255), book_id VARCHAR(255), lend_date VARCHAR(255), expire_date VARCHAR(255)"))
+
+# # insert dump data
+# dmp_users = [
+#     ["Hos", "localhost", "1327"],
+#     ["Zapp", "SAW", "1234"],
+# ]
+# for i in dmp_users:
+#     test = tmp.table_insert("users", "(username, address, phone)", tuple(i))
+#     print(tuple(i))
+# ###
+# dmp_books = [
+#     ["The C Programming", "K&R", "idk"],
+#     ["How to Become a Hacker", "Erick Raymond", "idk"],
+# ]
+# for i in dmp_books:
+#     test = tmp.table_insert("books", "(book, author, publisher)", tuple(i))
+#     print(tuple(i))
+# ###
+# dmp_stack = [
+#     ["1", "2", "2023/12/28"],
+#     ["2", "1", "2023/10/18"],
+# ]
+# for i in dmp_stack:
+#     test = tmp.table_insert("stack", "(user_id, book_id, date)", tuple(i))
+#     print(tuple(i))
+
+test = []
+
+# test = tmp.table_select("users", "username")
+# test = tmp.table_filter("books", "*", "book", "'Simple book'")
 # test = tmp.table_insert("customers", "(name, address)", ("John", "Highway 21"))
 # test = tmp.table_delete("customers", "*", "52")
-test = tmp.table_sort("customers", "*", "id") # apend ` DESC` to reversed sort
+# test = tmp.table_sort("books", "*", "id") # apend ` DESC` to reversed sort
 # test = tmp.table_delete("customers", "id", "51")
-# test = tmp.table_update("customers", "name = 'Amy'", "name = 'Hos'")
+# test = tmp.table_update("books", "id = 1", "book = 'Simple book', author = 'Who Knows', publisher = 'TodayLand'")
 
+test = tmp.table_filter("stack", "*", "id", "1")
 for key in test:
     print(key)
+
+
+# tmp.table_drop("books")
 
